@@ -1,0 +1,70 @@
+How-to guide for using Django (from what I've learned)
+
+NOTES: (as directories) FrenchToast is the model, and appFrenchToast is the application.
+
+
+To create a new Project and application:
+		Creating the Model
+1) Navigate to the project's directory, where you would like the project to be located.
+  (one directory above where this file is located)
+2) Enter the following:
+	>django-admin startproject FrenchToast
+	
+	-This will create a directory called "FrenchToast" with several necessary starter files.
+		Preparing to Create application
+3) Open FrenchToast/settings.py in a text editor
+4) Make sure you have the appropriate database packages (MySQL-python for MySQL)
+5) Look for the DATABASES group, there should be two fields by default: ENGINE, USER with values stored.
+6) If you are using SQLite, the defaults are fine. Otherwise, include:
+        'ENGINE': 'django.db.backends.mysql', (This value is for MySQL specifically)
+        'NAME': 'Toaster_Oven', (This value is the name of the DB)
+		'USER': 'admin', (This is a user assigned to the django api to allow permissions)
+		'PASSWORD': 'pass', (password for ^ user)
+		'HOST': '127.0.0.1', (the IP address of the server)
+		'PORT': '1357', (the port of the server)
+	--IN THIS FILE, YOU CAN ALSO MODIFY THE TIME_ZONE VALUE TO MATCH THE SERVER'S LOCATION.
+7) Save the file.
+		Creating the application
+8) In shell, navigate into the project folder.
+9) Enter the following:
+	>python manage.py startapp appFrenchToast
+	-This will create a directory called "appFrenchToast" with more necessary files within.
+10) Again, open the settings.py file in the project directory.
+11)	Under INSTALLED_APPS, add:
+	'FrenchToast.appFrenchToast',
+	
+	-This associates the application with the project.
+
+
+Creating database models:
+1) Within the application, open the models.py file.
+2) Add a class for each table that you want to create.
+	ie.
+		class User(models.Model):
+	This will create a "User" table.
+3) Add rows to the table in the following format:
+		user_ID = models.IntegerField(primary_key=True, unique=True)
+	This will create an Integer value that is a unique primary key.
+		owner_ID = models.ForeignKey(User, db_column='user_ID')
+	This creates a foreign key to the User table and the user_ID value
+4) Once you have created all of your tables, save the file.
+5) To actually create these tables, return to the shell.
+6) Navigate to the project directory and enter:
+	>python manage.py validate
+	
+	-This makes sure that you didn't fuck up, ya dingus
+7) If step 6 doesn't return errors, then enter:
+	>python manage.py merge
+	
+	-This should create the tables in the DB
+
+
+Running a Django Server:
+1) Navigate to the model directory (where this file is located)
+2) Enter the following:
+	>python manage.py runserver 127.0.0.1:1357
+	
+	-This shell is now dedicated to running a server on IP: 127.0.0.1 on port: 1357
+	NOTE: you don't have to add IP/port. They will default to the values in your settings.py file.
+	
+	
